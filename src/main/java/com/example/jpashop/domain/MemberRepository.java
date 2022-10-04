@@ -1,4 +1,4 @@
-package com.example.jpashop.entity;
+package com.example.jpashop.domain.entity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,13 +11,13 @@ public class MemberRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public Long save(Member member) {
+    public Long save(com.example.jpashop.domain.entity.Member member) {
         em.persist(member);
         return member.getId();
     }
 
-    public Member find(Long id) {
-        return em.find(Member.class, id);
+    public com.example.jpashop.domain.entity.Member find(Long id) {
+        return em.find(com.example.jpashop.domain.entity.Member.class, id);
     }
 
 }

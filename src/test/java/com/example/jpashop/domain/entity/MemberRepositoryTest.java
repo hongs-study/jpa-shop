@@ -1,6 +1,4 @@
-package com.example.jpashop.entity;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.example.jpashop.domain.entity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MemberRepositoryTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private com.example.jpashop.domain.entity.MemberRepository memberRepository;
     @PersistenceContext
     private EntityManager em;
 
@@ -26,13 +24,13 @@ class MemberRepositoryTest {
     @Test
     void memberTest() {
         //given
-        Member member = new Member();
+        com.example.jpashop.domain.entity.Member member = new com.example.jpashop.domain.entity.Member();
         member.setName("홍길동1");
 
         //when
         Long savedMemberId = memberRepository.save(member);
         em.clear();
-        Member findedMember = memberRepository.find(savedMemberId);
+        com.example.jpashop.domain.entity.Member findedMember = memberRepository.find(savedMemberId);
 
         //then
         Assertions.assertThat(findedMember.getId()).isEqualTo(member.getId());
