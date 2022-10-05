@@ -20,10 +20,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "tb_item")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
+@Entity
+@Table(name = "tb_item")
 public abstract class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

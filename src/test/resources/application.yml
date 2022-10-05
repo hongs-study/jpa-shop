@@ -1,5 +1,6 @@
 spring:
   datasource:
+#    url: jdbc:h2:tcp://localhost/~/Developer/datasource/h2/test;MVCC=TRUE
     url: jdbc:h2:mem:test # 인메모리DB 사용
     username: sa
     password:
