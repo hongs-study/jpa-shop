@@ -36,6 +36,9 @@ public class OrderItem {
     private int count;
 
     //==생성메서드==//
+
+    protected OrderItem() {}
+
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);

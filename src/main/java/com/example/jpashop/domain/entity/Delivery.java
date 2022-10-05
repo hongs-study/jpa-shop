@@ -35,4 +35,11 @@ public class Delivery {
     @Enumerated(value = EnumType.STRING)
     private DeliveryStatus status;
 
+    protected Delivery() {}
+
+    public static Delivery createDelivery(Address address) {
+        Delivery delivery = new Delivery();
+        delivery.address = address;
+        return delivery;
+    }
 }

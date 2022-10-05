@@ -60,6 +60,9 @@ public class Order {
     private OrderStatus status;
 
     //==생성메서드==//
+
+    protected Order() {}
+
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         Order order = new Order();
         order.setMember(member);
@@ -73,9 +76,9 @@ public class Order {
     }
 
     //==비지니스로직==//
-    public void cancel(Order order) {
+    public void cancel() {
         // 이미 배송완료면 취소 불가
-        if (order.getDelivery().getStatus() == DeliveryStatus.COMP) {
+        if (getDelivery().getStatus() == DeliveryStatus.COMP) {
             throw new IllegalStateException("이미 배송완료된 상품은 취소 할 수 없습니다.");
         }
         // 주문상태변경
@@ -83,7 +86,6 @@ public class Order {
         // 재고 변경
         for (OrderItem orderItem : this.orderItems) {
             orderItem.cancel();
-            //orderItem.getItem().addStock(orderItem.getCount());
         }
     }
 
