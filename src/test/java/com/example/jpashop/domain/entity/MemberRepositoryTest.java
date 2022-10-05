@@ -1,5 +1,6 @@
 package com.example.jpashop.domain.entity;
 
+import com.example.jpashop.repository.MemberRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MemberRepositoryTest {
 
     @Autowired
-    private com.example.jpashop.domain.entity.MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     @PersistenceContext
     private EntityManager em;
 
@@ -30,7 +31,7 @@ class MemberRepositoryTest {
         //when
         Long savedMemberId = memberRepository.save(member);
         em.clear();
-        com.example.jpashop.domain.entity.Member findedMember = memberRepository.find(savedMemberId);
+        com.example.jpashop.domain.entity.Member findedMember = memberRepository.findById(savedMemberId);
 
         //then
         Assertions.assertThat(findedMember.getId()).isEqualTo(member.getId());
