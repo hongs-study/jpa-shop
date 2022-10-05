@@ -1,5 +1,6 @@
 package com.example.jpashop.domain.entity;
 
+import com.example.jpashop.domain.DeliveryStatus;
 import com.example.jpashop.domain.OrderStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ import lombok.Setter;
 @Table(name = "tb_order")
 public class Order {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
 
@@ -37,6 +39,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
+
     public void addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
@@ -45,6 +48,7 @@ public class Order {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
+
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
@@ -54,4 +58,40 @@ public class Order {
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
+
+    //==생성메서드==//
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    //==비지니스로직==//
+    public void cancel(Order order) {
+        // 이미 배송완료면 취소 불가
+        if (order.getDelivery().getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소 할 수 없습니다.");
+        }
+        // 주문상태변경
+        this.status = OrderStatus.CANCEL;
+        // 재고 변경
+        for (OrderItem orderItem : this.orderItems) {
+            orderItem.cancel();
+            //orderItem.getItem().addStock(orderItem.getCount());
+        }
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : this.orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }

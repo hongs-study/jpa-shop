@@ -35,4 +35,22 @@ public class OrderItem {
 
     private int count;
 
+    //==생성메서드==//
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+        item.removeStock(count); // 비지니스로직 - OrderItem이 생성된다는 것은 상품(Item)의 재고가 빠진다는 말이다.
+        return orderItem;
+    }
+
+    //==비지니스로직==//
+    public void cancel() {
+        getItem().addStock(this.count);
+    }
+
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }
