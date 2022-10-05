@@ -3,11 +3,13 @@ package com.example.jpashop.web;
 import com.example.jpashop.domain.Address;
 import com.example.jpashop.domain.entity.Member;
 import com.example.jpashop.service.MemberService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,5 +37,12 @@ public class MemberController {
         member.setAddress(address);
         memberService.join(member);
         return "redirect:/";
+    }
+
+    @GetMapping
+    public String list(Model model) {
+        List<Member> all = memberService.findAll();
+        model.addAttribute("members", all);
+        return "member/memberList";
     }
 }
