@@ -1,5 +1,6 @@
 package com.example.jpashop.domain.entity.item;
 
+import com.example.jpashop.NotEnoughStockException;
 import com.example.jpashop.domain.entity.Category;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,4 +38,20 @@ public abstract class Item {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Category> categories = new ArrayList<>();
+
+    //===============핵심비지니스로직===============/
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("재고가 없습니다.");
+        }
+        this.stockQuantity = restStock;
+    }
+
+
+
 }
