@@ -2,11 +2,14 @@ package com.example.jpashop.api;
 
 import com.example.jpashop.domain.entity.Member;
 import com.example.jpashop.service.MemberService;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,29 +25,35 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping
-    public MemberDetailResponse join(@RequestBody @Valid CreateMemberRequest request) {
+    public MemberResponse join(@RequestBody @Valid CreateMemberRequest request) {
         Member member = new Member();
         member.setName(request.getName());
 
         Long memberId = memberService.join(member);
 
         Member savedMember = memberService.findOne(memberId);
-        MemberDetailResponse response = new MemberDetailResponse(savedMember.getId(), savedMember.getName());
+        MemberResponse response = new MemberResponse(savedMember.getId(), savedMember.getName());
         return response;
     }
 
     @PutMapping("/{memberId}")
-    public MemberDetailResponse update(@PathVariable("memberId") Long memberId, @RequestBody @Valid UpdateMemberRequest request) {
+    public MemberResponse update(@PathVariable("memberId") Long memberId, @RequestBody @Valid UpdateMemberRequest request) {
         memberService.updateMember(memberId, request.getName());
 
         Member savedMember = memberService.findOne(memberId);
-        MemberDetailResponse response = new MemberDetailResponse(savedMember.getId(), savedMember.getName());
+        MemberResponse response = new MemberResponse(savedMember.getId(), savedMember.getName());
         return response;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Member>> searchAll() {
+        List<Member> members = memberService.findMembers();
+        return ResponseEntity.ok(members);
     }
 
     @Data
     @AllArgsConstructor
-    static class MemberDetailResponse {
+    static class MemberResponse {
         private Long id;
         private String name;
     }
