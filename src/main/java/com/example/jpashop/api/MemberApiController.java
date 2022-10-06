@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,9 +45,11 @@ public class MemberApiController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Member>> searchAll() {
-        List<Member> members = memberService.findMembers();
-        return ResponseEntity.ok(members);
+    public Result<List<MemberResponse>> searchAll() {
+        List<MemberResponse> memberResponses = memberService.findMembers().stream()
+            .map(m -> new MemberResponse(m.getId(), m.getName()))
+            .toList();
+        return new Result<>(memberResponses.size(), memberResponses);
     }
 
     @Data
@@ -67,5 +68,21 @@ public class MemberApiController {
     @Data
     static class UpdateMemberRequest {
         private String name;
+    }
+
+    @Data
+    static class Result<T> {
+        private int count;
+        private T data;
+
+        public Result(int count, T data) {
+            this.count = count;
+            this.data = data;
+        }
+
+        public Result(int count, Iterable<?> memberResponses) {
+            this.count = count;
+            this.data = (T) memberResponses;
+        }
     }
 }
