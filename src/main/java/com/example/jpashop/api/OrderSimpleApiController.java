@@ -4,6 +4,8 @@ import com.example.jpashop.domain.Address;
 import com.example.jpashop.domain.OrderStatus;
 import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.repository.OrderRepository;
+import com.example.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import com.example.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
@@ -14,21 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v3/simple-orders")
+@RequestMapping("/api/v4/simple-orders")
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     /**
-     * V3 성능최적화 - N+1 문제 해결하기 > Fetch-Join
+     * V4 - DTO로 직접조회 (V3과 트레이드오프)
+     * Tip.
+     *  - 사실 DTO로 직접조회의 성능개서는 엄청 크지 않다.
+     *  - 또, V3-엔티티조회가 활용성이 더 크다.
+     *  - 따라서, V3-엔티티조회 를 기본으로 사용하다가 -> 필요할 때 V4-DTO로 직접조회를 선택적으로 써라.
      */
     @GetMapping
-    public List<SimpleOrderResponse> ordersV3() {
-        List<Order> orderEntities = orderRepository.findAllWithMemberAndDelivery();
-        List<SimpleOrderResponse> response = orderEntities.stream()
-            .map(order -> new SimpleOrderResponse(order))
-            .toList();
-        return response;
+    public List<OrderSimpleQueryDto> ordersV4() {
+        List<OrderSimpleQueryDto> orderDtoList = orderSimpleQueryRepository.findOrderDtoList();
+        return orderDtoList;
     }
 
 
@@ -72,6 +76,18 @@ public class OrderSimpleApiController {
             .map(order -> new SimpleOrderResponse(order))
             .toList();
 
+        return response;
+    }*/
+
+    /**
+     * V3 성능최적화 - N+1 문제 해결하기 > Fetch-Join
+     */
+    /*@GetMapping
+    public List<SimpleOrderResponse> ordersV3() {
+        List<Order> orderEntities = orderRepository.findAllWithMemberAndDelivery();
+        List<SimpleOrderResponse> response = orderEntities.stream()
+            .map(order -> new SimpleOrderResponse(order))
+            .toList();
         return response;
     }*/
 }
