@@ -1,6 +1,7 @@
 package com.example.jpashop.repository;
 
 import com.example.jpashop.domain.entity.Order;
+import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,7 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
+    public List<Order> findAllBy(OrderSearch orderSearch) {
+        return null;
+    }
 }
