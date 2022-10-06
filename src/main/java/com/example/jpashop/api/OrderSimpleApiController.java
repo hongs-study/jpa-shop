@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/simple-orders")
+@RequestMapping("/api/v2/simple-orders")
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
