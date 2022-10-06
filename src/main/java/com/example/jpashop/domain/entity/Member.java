@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,7 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @NotEmpty(message = "회원의 이름은 필수값입니다.")
     private String name;
 
     @Embedded
