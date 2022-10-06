@@ -24,8 +24,7 @@ public class OrderRepository {
     }
 
     /**
-     * 동적쿼리 만들기(참고)
-     * JPQL 로 직접 만들었다 (실무에서 안쓰니까 참고만)
+     * 동적쿼리 만들기(참고) JPQL 로 직접 만들었다 (실무에서 안쓰니까 참고만)
      */
     public List<Order> findAllByString(OrderSearch orderSearch) {
         //language=JPAQL
@@ -68,6 +67,16 @@ public class OrderRepository {
         return em.createQuery("select o from Order o"
                 + " join fetch o.member m"
                 + " join fetch o.delivery d", Order.class)
+            .getResultList();
+    }
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery("select distinct o"
+                + " from Order o"
+                + " join fetch o.member m"
+                + " join fetch o.delivery d"
+                + " join fetch o.orderItems oi"
+                + " join fetch oi.item i", Order.class)
             .getResultList();
     }
 }
