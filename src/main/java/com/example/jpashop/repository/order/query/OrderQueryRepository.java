@@ -13,7 +13,8 @@ public class OrderQueryRepository {
 
     private final EntityManager em;
 
-    public List<OrderQueryDto> findOrderQueryDto() {
+    // V4. N+1문제발생
+    public List<OrderQueryDto> findAllByDto() {
         // 1.메인 정보를 먼저 DTO조회한다
         List<OrderQueryDto> orders = findOrders();
 
@@ -26,7 +27,7 @@ public class OrderQueryRepository {
     }
 
     // v5
-    public List<OrderQueryDto> findOrderQueryDto_optimization() {
+    public List<OrderQueryDto> findAllByDto_optimization() {
         // 1.메인데이터 우선 조회 - N개 데이터
         List<OrderQueryDto> orders = findOrders();
 
@@ -53,6 +54,30 @@ public class OrderQueryRepository {
         // 쿼리 N+1 -> 2번으로 줄임
         return orders;
     }
+
+    //v6
+    public List<OrderFlatDto> findAllByDto_flat() {
+
+        List<OrderFlatDto> flatDtos = em.createQuery(
+                "select new com.example.jpashop.repository.order.query.OrderFlatDto("
+                    + "o.id, m.name, o.orderDate, o.status, d.address"
+                    + ", i.name, oi.orderPrice, oi.count"
+                    + ")"
+                    + " from Order o"
+                    + " join o.member m"
+                    + " join o.delivery d"
+                    + " join o.orderItems oi"
+                    + " join oi.item i"
+                , OrderFlatDto.class)
+            .getResultList();
+
+        return flatDtos;
+    }
+
+
+
+
+
 
     private List<OrderQueryDto> findOrders() {
         return em.createQuery(

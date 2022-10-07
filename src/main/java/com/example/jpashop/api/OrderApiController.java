@@ -1,10 +1,16 @@
 package com.example.jpashop.api;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
+
 import com.example.jpashop.domain.Address;
 import com.example.jpashop.domain.OrderStatus;
 import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.domain.entity.OrderItem;
 import com.example.jpashop.repository.OrderRepository;
+import com.example.jpashop.repository.order.query.OrderFlatDto;
+import com.example.jpashop.repository.order.query.OrderItemQueryDto;
 import com.example.jpashop.repository.order.query.OrderQueryDto;
 import com.example.jpashop.repository.order.query.OrderQueryRepository;
 import java.time.LocalDateTime;
@@ -24,6 +30,24 @@ public class OrderApiController {
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepository;
 
+    @GetMapping("/6")
+    public List<OrderQueryDto> orderV6() {
+        List<OrderFlatDto> flatdata = orderQueryRepository.findAllByDto_flat();
+
+        List<OrderQueryDto> response = flatdata.stream()
+            .collect(
+                groupingBy(
+                    o -> new OrderQueryDto(o.getOrderId(), o.getMemberName(), o.getOrderDate(), o.getOrderStatus(), o.getAddress()),
+                    mapping(o -> new OrderItemQueryDto(o.getOrderId(), o.getItemName(), o.getOrderPrice(), o.getOrderCount()), toList())
+            ))
+            .entrySet().stream()
+            .map(o -> new OrderQueryDto(o.getKey().getOrderId(), o.getKey().getMemberName()
+                , o.getKey().getOrderDate(), o.getKey().getOrderStatus(), o.getKey().getAddress()
+                , o.getValue()))
+            .toList();
+        return response;
+    }
+
     /**
      * 컬렉션조회V5 - N+1문제 해결하기
      * 결과 : 쿼리 2번만 실행됨
@@ -31,8 +55,8 @@ public class OrderApiController {
      *      for문이 늘어나서 더 문제가 되지 않나 싶었다. 하지만 Java-GroupBy로 만들었기 때문에 성능은 오히려 향상된다. -> 복잡도를 보면 O(1)이다
      */
     @GetMapping("5")
-    public List<OrderQueryDto> orders5() {
-        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDto_optimization();
+    public List<OrderQueryDto> ordersV5() {
+        List<OrderQueryDto> orders = orderQueryRepository.findAllByDto_optimization();
         return orders;
     }
 
@@ -59,7 +83,7 @@ public class OrderApiController {
      */
     /*@GetMapping("4")
     public List<OrderQueryDto> orders4() {
-        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDto();
+        List<OrderQueryDto> orders = orderQueryRepository.findAllByDto();
         return orders;
     }*/
 
