@@ -25,18 +25,19 @@ public class OrderApiController {
     private final OrderQueryRepository orderQueryRepository;
 
     /**
-     * v4 컬렉션조회-DTO로 직접 조회하기
-     * 방법: 메인 쿼리 조회 후 결과 개수만큼 for 돌면서 컬렉션 조회한다
-     * 문제점: 결국 N+1문제 발생(100건 조회 -> 101개 쿼리 실행됨)
+     * 컬렉션조회V5 - N+1문제 해결하기
+     * 결과 : 쿼리 2번만 실행됨
+     * 방법 : 메인쿼리 조회 -> ID추출 -> In쿼리로 서브데이터 조회 -> 메모리에서 메인데이터-서브데이터 합침
+     *      for문이 늘어나서 더 문제가 되지 않나 싶었다. 하지만 Java-GroupBy로 만들었기 때문에 성능은 오히려 향상된다. -> 복잡도를 보면 O(1)이다
      */
-    @GetMapping("4")
-    public List<OrderQueryDto> orders4() {
-        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDto();
+    @GetMapping("5")
+    public List<OrderQueryDto> orders5() {
+        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDto_optimization();
         return orders;
     }
 
     /**
-     * V3.1 ToMany 관계 - 페이징 한계 돌파
+     *  ToMany 관계(컬렉션조회) V3.1 (엔티티)- 페이징 한계 돌파
      * 방법 : default_batch_fetch_size, @BatchSize
      */
     @GetMapping("/3.1")
@@ -50,6 +51,17 @@ public class OrderApiController {
             .toList();
         return result;
     }
+
+    /**
+     * ToMany 관계(컬렉션조회) v4 - DTO 직접 조회하기
+     * 방법: 메인 쿼리 조회 후 결과 개수만큼 for 돌면서 컬렉션 조회한다
+     * 문제점: 결국 N+1문제 발생(100건 조회 -> 101개 쿼리 실행됨)
+     */
+    /*@GetMapping("4")
+    public List<OrderQueryDto> orders4() {
+        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDto();
+        return orders;
+    }*/
 
     @Data
     static class OrderDto {
