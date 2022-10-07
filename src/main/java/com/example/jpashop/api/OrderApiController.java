@@ -11,29 +11,26 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v3/orders")
+@RequestMapping("/api/v3.1/orders")
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
 
     /**
-     * 고급조회. 컬렉션 조회 최적화 V3 - DTO변환 + 페치조인 + distinct
-     * 컬렉션 조회시 문제점 : 데이터 뻥튀기 되는 문제
-     * 최적화 방법
-     *  1. 페치조인
-     *  2. distinct (JPA의 distinct : SQL의 distinct 기능 + 엔티티 중복시 컬렉션에 담아준다)
-     *
-     * but, 단점 & 주의사항
-     *  1. 페이징 할 수 없다(모든 데이터 조회해서 메모리에서 처리함) => 즉, 페이징 안쓰면 써도 됨.
-     *  2. 컬렉션 페치조인은 일대다 관계 1개만 가능하다. (뻥뻥튀기되니까)
+     * V3.1 ToMany 관계 - 페이징 한계 돌파
+     * 방법 : default_batch_fetch_size, @BatchSize
      */
     @GetMapping
-    public List<OrderDto> ordersV3() {
-        List<Order> orders = orderRepository.findAllWithItem();
+    public List<OrderDto> ordersV3_1_page(
+        @RequestParam(value = "offset", defaultValue = "0") int offset,
+        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
+    ) {
+        List<Order> orders = orderRepository.findAllWithItemPaging(offset, pageSize);
         List<OrderDto> result = orders.stream()
             .map(o -> new OrderDto(o))
             .toList();
@@ -71,4 +68,24 @@ public class OrderApiController {
             orderCount = orderItem.getCount();
         }
     }
+
+    /**
+     * 고급조회. 컬렉션 조회 최적화 V3 - DTO변환 + 페치조인 + distinct
+     * 컬렉션 조회시 문제점 : 데이터 뻥튀기 되는 문제
+     * 최적화 방법
+     *  1. 페치조인
+     *  2. distinct (JPA의 distinct : SQL의 distinct 기능 + 엔티티 중복시 컬렉션에 담아준다)
+     *
+     * but, 단점 & 주의사항
+     *  1. 페이징 할 수 없다(모든 데이터 조회해서 메모리에서 처리함) => 즉, 페이징 안쓰면 써도 됨.
+     *  2. 컬렉션 페치조인은 일대다 관계 1개만 가능하다. (뻥뻥튀기되니까)
+     */
+    /*@GetMapping
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+        List<OrderDto> result = orders.stream()
+            .map(o -> new OrderDto(o))
+            .toList();
+        return result;
+    }*/
 }
