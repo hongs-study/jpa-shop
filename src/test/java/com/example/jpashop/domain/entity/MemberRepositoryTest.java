@@ -1,6 +1,7 @@
 package com.example.jpashop.domain.entity;
 
 import com.example.jpashop.repository.MemberRepository;
+import com.example.jpashop.repository.MemberRepositoryOld;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
@@ -29,13 +30,14 @@ class MemberRepositoryTest {
         member.setName("홍길동1");
 
         //when
-        Long savedMemberId = memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
         em.clear();
-        com.example.jpashop.domain.entity.Member findedMember = memberRepository.findById(savedMemberId);
+        Member findMember = memberRepository.findById(savedMember.getId())
+            .orElseThrow(() -> new IllegalStateException("멤버가 조회되지 않습니다."));
 
         //then
-        Assertions.assertThat(findedMember.getId()).isEqualTo(member.getId());
-        Assertions.assertThat(findedMember.getName()).isEqualTo(member.getName());
+        Assertions.assertThat(findMember.getId()).isEqualTo(member.getId());
+        Assertions.assertThat(findMember.getName()).isEqualTo(member.getName());
     }
 
 }

@@ -3,7 +3,9 @@ package com.example.jpashop.service;
 import com.example.jpashop.domain.entity.Member;
 import com.example.jpashop.repository.MemberRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,8 @@ public class MemberService {
     @Transactional
     public Long join(Member member) {
         validateDuplicateMember(member);
-        Long id = memberRepository.save(member);
-        return id;
+        Member savedMember = memberRepository.save(member);
+        return savedMember.getId();
     }
 
     private void validateDuplicateMember(Member member) {
@@ -36,12 +38,14 @@ public class MemberService {
 
     // 회원 1명 조회
     public Member findOne(Long id) {
-        return memberRepository.findById(id);
+        return memberRepository.findById(id)
+            .orElseThrow(() -> new IllegalStateException("조회하는 회원이 없습니다"));
     }
 
     @Transactional
     public void updateMember(Long memberId, String memberName) {
-        Member member = memberRepository.findById(memberId);
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new IllegalStateException("조회하는 회원이 없습니다"));
         member.setName(memberName);
     }
 }

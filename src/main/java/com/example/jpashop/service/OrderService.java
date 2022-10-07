@@ -6,7 +6,7 @@ import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.domain.entity.OrderItem;
 import com.example.jpashop.domain.entity.item.Item;
 import com.example.jpashop.repository.ItemRepository;
-import com.example.jpashop.repository.MemberRepository;
+import com.example.jpashop.repository.MemberRepositoryOld;
 import com.example.jpashop.repository.OrderRepository;
 import com.example.jpashop.repository.OrderSearch;
 import java.util.List;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryOld memberRepository;
     private final ItemRepository itemRepository;
 
     // 주문

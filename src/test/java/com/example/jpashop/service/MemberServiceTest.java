@@ -3,7 +3,7 @@ package com.example.jpashop.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.jpashop.domain.entity.Member;
-import com.example.jpashop.repository.MemberRepository;
+import com.example.jpashop.repository.MemberRepositoryOld;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MemberServiceTest {
 
     @Autowired private MemberService memberService;
-    @Autowired private MemberRepository memberRepository;
+    @Autowired private MemberRepositoryOld memberRepository;
 
 
     @DisplayName("[회원가입] 성공")
