@@ -5,6 +5,8 @@ import com.example.jpashop.domain.OrderStatus;
 import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.domain.entity.OrderItem;
 import com.example.jpashop.repository.OrderRepository;
+import com.example.jpashop.repository.order.query.OrderQueryDto;
+import com.example.jpashop.repository.order.query.OrderQueryRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
@@ -16,16 +18,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v3.1/orders")
+@RequestMapping("/api/v4/orders")
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
+
+    /**
+     * v4 컬렉션조회-DTO로 직접 조회하기
+     * 방법: 메인 쿼리 조회 후 결과 개수만큼 for 돌면서 컬렉션 조회한다
+     * 문제점: 결국 N+1문제 발생(100건 조회 -> 101개 쿼리 실행됨)
+     */
+    @GetMapping("4")
+    public List<OrderQueryDto> orders4() {
+        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDto();
+        return orders;
+    }
 
     /**
      * V3.1 ToMany 관계 - 페이징 한계 돌파
      * 방법 : default_batch_fetch_size, @BatchSize
      */
-    @GetMapping
+    @GetMapping("/3.1")
     public List<OrderDto> ordersV3_1_page(
         @RequestParam(value = "offset", defaultValue = "0") int offset,
         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
