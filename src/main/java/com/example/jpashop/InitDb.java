@@ -66,8 +66,7 @@ public class InitDb {
 
 
         private static Member getMember(String memberName, Address address) {
-            Member member = new Member();
-            member.setName(memberName);
+            Member member = new Member(memberName);
             member.setAddress(address);
             return member;
         }

@@ -1,7 +1,9 @@
+server:
+  port: 8000
+
 spring:
   datasource:
-#    url: jdbc:h2:tcp://localhost/~/Developer/datasource/h2/test;MVCC=TRUE
-    url: jdbc:h2:mem:test # 인메모리DB 사용
+    url: jdbc:h2:tcp://localhost/~/Developer/datasource/h2/test
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -11,8 +13,11 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
+        #        show_sql: true # system.out 으로 출력
         format_sql: true
+        default_batch_fetch_size: 500
 
 logging: # logger로 출력
   level:
     org.hibernate.SQL: debug
+#    org.hibernate.type: true

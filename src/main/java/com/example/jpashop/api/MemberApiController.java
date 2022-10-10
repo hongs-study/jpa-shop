@@ -25,8 +25,7 @@ public class MemberApiController {
 
     @PostMapping
     public MemberResponse join(@RequestBody @Valid CreateMemberRequest request) {
-        Member member = new Member();
-        member.setName(request.getName());
+        Member member = new Member(request.getName());
 
         Long memberId = memberService.join(member);
 

@@ -125,8 +125,7 @@ class OrderServiceTest {
     }
 
     private static Member createMember() {
-        Member member = new Member();
-        member.setName("고객1");
+        Member member = new Member("고객1");
         member.setAddress(new Address("서울시", "강남구 1로 123", "12345"));
         return member;
     }

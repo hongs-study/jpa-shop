@@ -26,8 +26,7 @@ class MemberRepositoryTest {
     @Test
     void memberTest() {
         //given
-        Member member = new Member();
-        member.setName("홍길동1");
+        Member member = new Member("홍길동1");
 
         //when
         Member savedMember = memberRepository.save(member);
