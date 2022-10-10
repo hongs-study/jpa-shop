@@ -1,7 +1,7 @@
 package com.example.jpashop.domain.entity;
 
+import com.example.jpashop.entity.Member;
 import com.example.jpashop.repository.MemberRepository;
-import com.example.jpashop.repository.MemberRepositoryOld;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
@@ -26,7 +26,7 @@ class MemberRepositoryTest {
     @Test
     void memberTest() {
         //given
-        com.example.jpashop.domain.entity.Member member = new com.example.jpashop.domain.entity.Member();
+        Member member = new Member();
         member.setName("홍길동1");
 
         //when

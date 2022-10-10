@@ -1,6 +1,6 @@
 package com.example.jpashop.web;
 
-import com.example.jpashop.domain.entity.Member;
+import com.example.jpashop.entity.Member;
 import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.domain.entity.item.Item;
 import com.example.jpashop.repository.OrderSearch;

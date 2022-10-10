@@ -2,7 +2,7 @@ package com.example.jpashop.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.jpashop.domain.entity.Member;
+import com.example.jpashop.entity.Member;
 import com.example.jpashop.repository.MemberRepositoryOld;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

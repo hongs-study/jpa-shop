@@ -1,6 +1,7 @@
-package com.example.jpashop.domain.entity;
+package com.example.jpashop.entity;
 
 import com.example.jpashop.domain.Address;
+import com.example.jpashop.domain.entity.Order;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;

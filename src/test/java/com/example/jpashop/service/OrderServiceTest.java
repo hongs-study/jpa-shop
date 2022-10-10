@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.example.jpashop.NotEnoughStockException;
 import com.example.jpashop.domain.Address;
 import com.example.jpashop.domain.OrderStatus;
-import com.example.jpashop.domain.entity.Member;
+import com.example.jpashop.entity.Member;
 import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.domain.entity.OrderItem;
 import com.example.jpashop.domain.entity.item.Book;

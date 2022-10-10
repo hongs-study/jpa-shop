@@ -1,6 +1,6 @@
 package com.example.jpashop.repository;
 
-import com.example.jpashop.domain.entity.Member;
+import com.example.jpashop.entity.Member;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

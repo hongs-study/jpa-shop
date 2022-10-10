@@ -2,6 +2,7 @@ package com.example.jpashop.domain.entity;
 
 import com.example.jpashop.domain.DeliveryStatus;
 import com.example.jpashop.domain.OrderStatus;
+import com.example.jpashop.entity.Member;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.example.jpashop;
 
 import com.example.jpashop.domain.Address;
 import com.example.jpashop.domain.entity.Delivery;
-import com.example.jpashop.domain.entity.Member;
+import com.example.jpashop.entity.Member;
 import com.example.jpashop.domain.entity.Order;
 import com.example.jpashop.domain.entity.OrderItem;
 import com.example.jpashop.domain.entity.item.Book;
