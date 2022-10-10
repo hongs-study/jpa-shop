@@ -25,6 +25,9 @@ class MemberRepositoryTest {
     @DisplayName("회원저장과 조회 테스트")
     @Test
     void memberTest() {
+
+        System.out.println("memberRepository = " + memberRepository.getClass());
+
         //given
         Member member = new Member("홍길동1");
 
