@@ -20,3 +20,4 @@ spring:
 logging: # logger로 출력
   level:
     org.hibernate.SQL: debug
+#    org.hibernate.type: true
