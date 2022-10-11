@@ -185,4 +185,25 @@ class MemberRepositoryTest {
     }
 
 
+
+
+    @DisplayName("쿼리메서드기능3-파라미터바인딩IN")
+    @Test
+    void findByName() {
+        //given
+        Team 팀1 = new Team("팀1");
+        teamRepository.save(팀1);
+        Member member1 = new Member("회원1", 10, 팀1);
+        Member member2 = new Member("회원2", 20, 팀1);
+        Member member3 = new Member("회원3", 20, 팀1);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+
+        //when
+        Member 회원2 = memberRepository.findByName("회원2");
+
+        System.out.println("회원2 ==> " + 회원2);
+    }
+
 }
