@@ -228,6 +228,13 @@ class MemberRepositoryTest {
         //when
         Page<Member> page = memberRepository.findByAge(age, pageRequest);
 
+        // DTO 객체로 변환
+        Page<MemberDto> mapMember = page.map(
+            m -> new MemberDto(m.getId(), m.getName(), m.getTeam().getName()));
+
+        mapMember.forEach(e -> System.out.println(e));
+        System.out.println("===============");
+
         // 페이지 계산 공식... totalPage, 마지막 페이지, 최초 페이지... => 복잡하고 짜증남
         System.out.println("page.getTotalElements() => " + page.getTotalElements());
         System.out.println("totalPage => " + page.getTotalPages());
