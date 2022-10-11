@@ -79,4 +79,37 @@ class MemberRepositoryTest {
         assertThat(afterDelCount).isEqualTo(0);
 
     }
+
+    @DisplayName("메소드이름으로쿼리생성 - 스프링JPA사용해보기 - JPA직접사용과 동일한 기능 확인")
+    @Test
+    void testQuery() {
+        //given
+        Member member1 = new Member("회원1", 10, null);
+        Member member2 = new Member("회원1", 20, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> members = memberRepository.findTop3HelloBy();
+
+        //then
+        assertThat(members.size()).isGreaterThan(1);
+
+    }
+
+    @DisplayName("쿼리메서드기능2-JPA Named Query")
+    @Test
+    void jpaNamedQuery() {
+        //given
+        Member member1 = new Member("회원1", 10, null);
+        Member member2 = new Member("회원1", 20, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> members = memberRepository.findByUserName("회원1");
+
+        //then
+        assertThat(members.get(0).getName()).isEqualTo("회원1");
+    }
 }

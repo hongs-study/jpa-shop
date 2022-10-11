@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -21,6 +22,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@NamedQuery(
+    name = "Member.findByUserName",
+    query = "select m from Member m where m.name = :userName"
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name", "age"})
 @Getter

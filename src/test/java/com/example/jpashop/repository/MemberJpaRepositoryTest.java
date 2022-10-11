@@ -72,6 +72,38 @@ class MemberJpaRepositoryTest {
 
         long afterDelCount = memberJpaRepository.count();
         assertThat(afterDelCount).isEqualTo(0);
+    }
 
+    @DisplayName("메소드이름으로쿼리생성")
+    @Test
+    void testQuery() {
+        //given
+        Member member1 = new Member("회원1", 10, null);
+        Member member2 = new Member("회원1", 20, null);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        //when
+        List<Member> members = memberJpaRepository.findByNameAndAgeGreaterThan("회원1", 1);
+
+        //then
+        assertThat(members.size()).isGreaterThan(1);
+        assertThat(members.get(0).getName()).isEqualTo("회원1");
+    }
+
+    @DisplayName("쿼리메서드기능2-JPA Named Query")
+    @Test
+    void jpaNamedQuery() {
+        //given
+        Member member1 = new Member("회원1", 10, null);
+        Member member2 = new Member("회원1", 20, null);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        //when
+        List<Member> members = memberJpaRepository.findByUserName("회원1");
+
+        //then
+        assertThat(members.get(0).getName()).isEqualTo("회원1");
     }
 }

@@ -33,4 +33,19 @@ public class MemberJpaRepository {
     public long count() {
         return em.createQuery("select count(m) from Member m", Long.class).getSingleResult();
     }
+
+    // 쿼리메서드기능1 - JPA직접작성 (참고) => MemberRepository.java에서 쉽게 사용 가능
+    public List<Member> findByNameAndAgeGreaterThan(String username, int userage) {
+        return em.createQuery("select m from Member m where m.name = :username and m.age > :userage")
+            .setParameter("username", username)
+            .setParameter("userage", userage)
+            .getResultList();
+    }
+
+    // 쿼리메서드기능2 - JpaNameQuery (참고) => MemberRepository.java에서 쉽게 사용 가능
+    public List<Member> findByUserName(String userName) {
+        return em.createNamedQuery("Member.findByUserName", Member.class)
+            .setParameter("userName", userName)
+            .getResultList();
+    }
 }
