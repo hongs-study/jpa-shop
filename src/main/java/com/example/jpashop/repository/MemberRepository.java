@@ -3,13 +3,17 @@ package com.example.jpashop.repository;
 import com.example.jpashop.entity.Member;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -70,4 +74,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //@EntityGraph - 자동생성 컬럼명메서드인 경우
     @EntityGraph(attributePaths = {"team"})
     List<Member> findEntityGraphByName(@Param("name") String userName);
+
+    @QueryHints(value = {@QueryHint(name = "org.hibernate.readOnly", value = "true")})
+    Member findReadOnlyByName(String username);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Member> findLockByName(String userName);
 }

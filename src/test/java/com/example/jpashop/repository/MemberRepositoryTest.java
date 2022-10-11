@@ -308,6 +308,36 @@ class MemberRepositoryTest {
             System.out.println(e);
             System.out.println(e.getTeam());
         });
+    }
+
+    @DisplayName("JPA힌트")
+    @Test
+    void jpaHint() {
+        //given
+        Member member1 = memberRepository.save(new Member("회원1", 10, null));
+        em.flush();
+        em.clear();
+
+        // JPA는 기본적으로 엔티티를 조회하면 메모리에 2개의 영역을 차지한다 (for 변경감지(=update문 자동 날림)를 위해)
+        // 하지만, 데이터변경(=변경감지)이 없이 단순히 조회만 한다면 굳이 2개의 메모리를 차지하는 것은 비효율적이다.
+        // 그 때 하이버네이트에게 readOnly 힌트를 줘서 메모리1개만 차지 + 변경감지(=자동 update)가 일어나지 않게 한다.
+/*        Member findMember = memberRepository.findById(member1.getId()).get();
+        findMember.setName("회원2");
+        em.flush();*/
+
+        Member findMemberOne = memberRepository.findReadOnlyByName(member1.getName());
+        findMemberOne.setName("회원22");
+        em.flush();
+    }
+
+    @DisplayName("락")
+    @Test
+    void lock() {
+        //given
+        Member member1 = memberRepository.save(new Member("회원1", 10, null));
+        em.flush();
+        em.clear();
+        List<Member> 회원1 = memberRepository.findLockByName("회원1");
 
     }
 }
