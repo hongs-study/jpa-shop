@@ -40,6 +40,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m where m.name in :userNames")
     List<Member> findByUserNameIn(@Param("userNames") Collection<String> userNames);
 
+    @Query(
+        value = "select m from Member m join m.team t where m.age = :age"
+        , countQuery = "select count(m) from Member m where m.age = :age"
+    )
     Page<Member> findByAge(@Param("age") int age, Pageable pageable);
     Slice<Member> findByName(String userName, Pageable pageable);
     List<Member> findByNickName(String nickName, Pageable pageable);
