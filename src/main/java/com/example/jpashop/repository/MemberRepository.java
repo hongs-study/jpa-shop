@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -52,4 +53,21 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying(clearAutomatically = true) // 이 어노테이션이 있어야 executeUpdate() 를 실행한다. clearAutomatically = true를 해야 영속성컨텍스트 문제가 없다
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
+
+    @Query("select m from Member m join fetch m.team")
+    List<Member> findMemberFetchJoin();
+
+    //@EntityGraph - 인터페이스 JpaRepository에서 제공하는 기본 메서드 - Override + EntityGraph 적용
+    @EntityGraph(attributePaths = {"team"})
+    @Override
+    List<Member> findAll();
+
+    //@EntityGraph - JPQL 직접작성인 경우
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m join fetch m.team")
+    List<Member> findMemberEntityGraph();
+
+    //@EntityGraph - 자동생성 컬럼명메서드인 경우
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findEntityGraphByName(@Param("name") String userName);
 }
