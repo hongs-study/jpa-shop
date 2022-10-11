@@ -256,4 +256,28 @@ class MemberRepositoryTest {
 
         page.forEach(e -> System.out.println(e));
     }
+
+    @DisplayName("[벌크수정쿼리]")
+    @Test
+    void bulkAgePlus() {
+        //given
+        memberRepository.save(new Member("회원1", 10, null));
+        memberRepository.save(new Member("회원2", 20, null));
+        memberRepository.save(new Member("회원3", 19, null));
+        memberRepository.save(new Member("회원4", 25, null));
+        memberRepository.save(new Member("회원5", 20, null));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+        // 필수! 벌크연산 직후 반드시 쿼리를 모두 보내고, 영속성 컨텍스트를 비워주자. => 그 다음 로직에서 영속성컨텍스트를 리프레쉬된 데이터로 다시 채울 수 있게!
+        //em.flush(); => JPA에서는 벌크연산이 있으면 벌크연산직전에 모두 flush를 호출먼저 한다.
+        //em.clear(); => @Modifying(clearAutomatically = true) 를 하면 SpringJPA에서 자동으로 clear를 해준다
+
+        List<Member> 회원5 = memberRepository.findByUserName("회원5");
+        assertThat(회원5.get(0).getAge()).isEqualTo(21);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+    }
 }

@@ -130,6 +130,22 @@ class MemberJpaRepositoryTest {
         //then
         assertThat(page.size()).isEqualTo(3);
         assertThat(totalCount).isEqualTo(4);
+    }
 
+    @DisplayName("[벌크수정쿼리]")
+    @Test
+    void bulkAgePlus() {
+        //given
+        memberJpaRepository.save(new Member("회원1", 10, null));
+        memberJpaRepository.save(new Member("회원2", 20, null));
+        memberJpaRepository.save(new Member("회원3", 19, null));
+        memberJpaRepository.save(new Member("회원4", 25, null));
+        memberJpaRepository.save(new Member("회원5", 20, null));
+
+        //when
+        int resultCount = memberJpaRepository.bulkAgePlus(20);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
     }
 }

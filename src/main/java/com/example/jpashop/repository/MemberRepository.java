@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -47,4 +48,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findByAge(@Param("age") int age, Pageable pageable);
     Slice<Member> findByName(String userName, Pageable pageable);
     List<Member> findByNickName(String nickName, Pageable pageable);
+
+    @Modifying(clearAutomatically = true) // 이 어노테이션이 있어야 executeUpdate() 를 실행한다. clearAutomatically = true를 해야 영속성컨텍스트 문제가 없다
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
 }
