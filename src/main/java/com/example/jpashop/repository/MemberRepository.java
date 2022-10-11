@@ -18,4 +18,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query(name = "Member.findByUserName") // 관례
     List<Member> findByUserName(@Param("userName") String userName);
 
+    // 쿼리메서드기능3 - 리파지토리 메서드에 직접 쿼리 작성(실무에서 2번보다 많이 씀)
+    @Query("select m from Member m where m.name = :userName and m.age = :userAge")
+    List<Member> findUser(@Param("userName") String userName, @Param("userAge") int userAge);
+
 }

@@ -80,7 +80,7 @@ class MemberRepositoryTest {
 
     }
 
-    @DisplayName("메소드이름으로쿼리생성 - 스프링JPA사용해보기 - JPA직접사용과 동일한 기능 확인")
+    @DisplayName("쿼리메서드기능1-컬럼명으로메서드생성")
     @Test
     void testQuery() {
         //given
@@ -97,7 +97,7 @@ class MemberRepositoryTest {
 
     }
 
-    @DisplayName("쿼리메서드기능2-JPA Named Query")
+    @DisplayName("쿼리메서드기능2-JpaNamedQuery")
     @Test
     void jpaNamedQuery() {
         //given
@@ -111,5 +111,22 @@ class MemberRepositoryTest {
 
         //then
         assertThat(members.get(0).getName()).isEqualTo("회원1");
+    }
+
+    @DisplayName("쿼리메서드기능3-@Query에 직접 JPQL작성")
+    @Test
+    void jpaQueryMethod() {
+        //given
+        Member member1 = new Member("회원1", 10, null);
+        Member member2 = new Member("회원1", 20, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> members = memberRepository.findUser("회원1", 10);
+
+        //then
+        assertThat(members.get(0).getName()).isEqualTo("회원1");
+        assertThat(members.get(0).getAge()).isEqualTo(10);
     }
 }
