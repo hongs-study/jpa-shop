@@ -106,4 +106,30 @@ class MemberJpaRepositoryTest {
         //then
         assertThat(members.get(0).getName()).isEqualTo("회원1");
     }
+
+    @DisplayName("페이징")
+    @Test
+    void paging() {
+        //given
+        memberJpaRepository.save(new Member("회원1", 10, null));
+        memberJpaRepository.save(new Member("회원2", 20, null));
+        memberJpaRepository.save(new Member("회원3", 20, null));
+        memberJpaRepository.save(new Member("회원4", 20, null));
+        memberJpaRepository.save(new Member("회원5", 20, null));
+
+        int age = 20;
+        int offset = 0;
+        int limit = 3;
+
+        //when
+        List<Member> page = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(age);
+
+        // 페이지 계산 공식... totalPage, 마지막 페이지, 최초 페이지... => 복잡하고 짜증남
+
+        //then
+        assertThat(page.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(4);
+
+    }
 }
