@@ -163,5 +163,26 @@ class MemberRepositoryTest {
         memberDto.forEach(e -> System.out.println(e));
     }
 
+    @DisplayName("쿼리메서드기능3-파라미터바인딩IN")
+    @Test
+    void findByUserNameIn() {
+        //given
+        Team 팀1 = new Team("팀1");
+        teamRepository.save(팀1);
+        Member member1 = new Member("회원1", 10, 팀1);
+        Member member2 = new Member("회원2", 20, 팀1);
+        Member member3 = new Member("회원3", 20, 팀1);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+
+        //when
+        List<Member> members = memberRepository.findByUserNameIn(List.of("회원1", "회원2"));
+
+        //then
+        assertThat(members.size()).isEqualTo(2);
+        members.forEach(e -> System.out.println(e));
+    }
+
 
 }

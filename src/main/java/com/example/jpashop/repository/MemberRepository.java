@@ -1,6 +1,7 @@
 package com.example.jpashop.repository;
 
 import com.example.jpashop.entity.Member;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +31,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 쿼리메서드기능3 - DTO로 조회하기
     @Query("select new com.example.jpashop.repository.MemberDto(m.id, m.name, t.name) from Member m join m.team t")
     List<MemberDto> findMemberDto();
+
+    @Query("select m from Member m where m.name in :userNames")
+    List<Member> findByUserNameIn(@Param("userNames") Collection<String> userNames);
 }
