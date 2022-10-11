@@ -22,4 +22,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m where m.name = :userName and m.age = :userAge")
     List<Member> findUser(@Param("userName") String userName, @Param("userAge") int userAge);
 
+
+    // 쿼리메서드기능3 - 컬럼 1개만 조회하기 (컬럼에 맞는 데이터타입으로 반환해주면 됨)
+    @Query("select m.name from Member m")
+    List<String> findUserNameList();
+
+    // 쿼리메서드기능3 - DTO로 조회하기
+    @Query("select new com.example.jpashop.repository.MemberDto(m.id, m.name, t.name) from Member m join m.team t")
+    List<MemberDto> findMemberDto();
 }

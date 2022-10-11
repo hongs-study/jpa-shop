@@ -4,6 +4,7 @@ package com.example.jpashop.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.example.jpashop.entity.Member;
+import com.example.jpashop.entity.Team;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,6 +22,8 @@ class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private TeamRepository teamRepository;
     @PersistenceContext
     private EntityManager em;
 
@@ -129,4 +132,36 @@ class MemberRepositoryTest {
         assertThat(members.get(0).getName()).isEqualTo("회원1");
         assertThat(members.get(0).getAge()).isEqualTo(10);
     }
+
+    @DisplayName("쿼리메서드기능3-단순히값하나조회")
+    @Test
+    void test123() {
+        //given
+        Member member1 = new Member("회원1", 10, null);
+        Member member2 = new Member("회원1", 20, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<String> userNameList = memberRepository.findUserNameList();
+        userNameList.forEach(e -> System.out.println(e));
+    }
+
+    @DisplayName("쿼리메서드기능3-단순히값하나조회")
+    @Test
+    void test1234() {
+        //given
+        Team 팀1 = new Team("팀1");
+        teamRepository.save(팀1);
+        Member member1 = new Member("회원1", 10, 팀1);
+        Member member2 = new Member("회원1", 20, 팀1);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<MemberDto> memberDto = memberRepository.findMemberDto();
+        memberDto.forEach(e -> System.out.println(e));
+    }
+
+
 }
