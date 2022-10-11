@@ -3,6 +3,9 @@ package com.example.jpashop.repository;
 import com.example.jpashop.entity.Member;
 import java.util.Collection;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +39,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m from Member m where m.name in :userNames")
     List<Member> findByUserNameIn(@Param("userNames") Collection<String> userNames);
+
+    Page<Member> findByAge(@Param("age") int age, Pageable pageable);
+    Slice<Member> findByName(String userName, Pageable pageable);
+    List<Member> findByNickName(String nickName, Pageable pageable);
 }

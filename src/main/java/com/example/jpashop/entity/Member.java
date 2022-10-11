@@ -49,6 +49,9 @@ public class Member {
     @Column(name = "member_name", nullable = false)
     private String name;
 
+    @Column(name = "member_nick_name")
+    private String nickName;
+
     private int age;
 
     @Embedded

@@ -13,6 +13,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,9 +188,6 @@ class MemberRepositoryTest {
         members.forEach(e -> System.out.println(e));
     }
 
-
-
-
     @DisplayName("쿼리메서드기능3-파라미터바인딩IN")
     @Test
     void findByName() {
@@ -206,4 +207,46 @@ class MemberRepositoryTest {
         System.out.println("회원2 ==> " + 회원2);
     }
 
+    @DisplayName("페이징")
+    @Test
+    void paging() {
+        //given
+        Team 팀1 = new Team("팀1");
+        teamRepository.save(팀1);
+        memberRepository.save(new Member("회원1", 10, 팀1));
+        memberRepository.save(new Member("회원1", 20, 팀1));
+        memberRepository.save(new Member("회원1", 20, 팀1));
+        memberRepository.save(new Member("회원4", 20, 팀1));
+        memberRepository.save(new Member("회원5", 20, 팀1));
+
+        int age = 20;
+        int offset = 0;
+        int limit = 3;
+
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(Direction.DESC, "name"));
+
+        //when
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        // 페이지 계산 공식... totalPage, 마지막 페이지, 최초 페이지... => 복잡하고 짜증남
+        System.out.println("page.getTotalElements() => " + page.getTotalElements());
+        System.out.println("totalPage => " + page.getTotalPages());
+        System.out.println("currentPageNumber => " + page.getNumber());
+        System.out.println("page.isFirst() => " + page.isFirst());
+        System.out.println("page.isLast() => " + page.isLast());
+        System.out.println("page.hasNext() => " + page.hasNext());
+
+        // Slice 테스트 => totalCount 쿼리 없음
+        //Slice<Member> slice = memberRepository.findByName("회원1", pageRequest);
+        //System.out.println("slice currentPageNumber => " + slice.getNumber());
+        //System.out.println("slice.isFirst() => " + slice.isFirst());
+        //System.out.println("slice.isLast() => " + slice.isLast());
+        //System.out.println("slice.hasNext() => " + slice.hasNext());
+
+        //then
+        assertThat(page.getSize()).isEqualTo(3);
+        assertThat(page.getTotalElements()).isEqualTo(4);
+
+        page.forEach(e -> System.out.println(e));
+    }
 }
