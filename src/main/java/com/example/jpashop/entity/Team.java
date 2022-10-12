@@ -22,7 +22,7 @@ import lombok.ToString;
 @Setter
 @Entity
 @Table(name = "tb_team")
-public class Team extends BaseEntity {
+public class Team extends JpaBaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
