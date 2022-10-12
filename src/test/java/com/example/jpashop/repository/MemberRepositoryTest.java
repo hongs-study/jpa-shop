@@ -338,6 +338,12 @@ class MemberRepositoryTest {
         em.flush();
         em.clear();
         List<Member> 회원1 = memberRepository.findLockByName("회원1");
+    }
 
+    @DisplayName("사용자정의쿼리 인터페이스")
+    @Test
+    void customInterface() {
+        //given
+        List<Member> memberCustom = memberRepository.findMemberCustom();
     }
 }
