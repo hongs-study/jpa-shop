@@ -66,6 +66,10 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Override
     List<Member> findAll();
 
+    @EntityGraph(attributePaths = {"team"})
+    @Override
+    Page<Member> findAll(Pageable pageable);
+
     //@EntityGraph - JPQL 직접작성인 경우
     @EntityGraph(attributePaths = {"team"})
     @Query("select m from Member m join fetch m.team")

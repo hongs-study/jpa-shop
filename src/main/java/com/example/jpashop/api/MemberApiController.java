@@ -1,6 +1,7 @@
 package com.example.jpashop.api;
 
 import com.example.jpashop.entity.Member;
+import com.example.jpashop.repository.MemberDto;
 import com.example.jpashop.repository.MemberRepository;
 import com.example.jpashop.service.MemberService;
 import java.util.List;
@@ -10,6 +11,8 @@ import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +35,6 @@ public class MemberApiController {
         return member.getName();
     }
 
-    //
     @GetMapping("/test2/{id}")
     public String findMember2(@PathVariable("id") Member member) {
         return member.getName();
@@ -40,9 +42,15 @@ public class MemberApiController {
 
     @PostConstruct
     public void init() {
-        memberRepository.save(new Member("회원1"));
+        for (int i=0; i<100; i++) {
+            memberRepository.save(new Member("회원" + i, i, null));
+        }
     }
 
+    @GetMapping("/members/page")
+    public Page<MemberDto> findMembersPage(Pageable pageable) {
+        return memberRepository.findAll(pageable).map(MemberDto::new);
+    }
 
 
 

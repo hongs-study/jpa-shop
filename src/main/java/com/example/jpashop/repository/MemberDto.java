@@ -1,5 +1,7 @@
 package com.example.jpashop.repository;
 
+import com.example.jpashop.entity.Member;
+import java.util.Optional;
 import lombok.Data;
 
 @Data
@@ -13,5 +15,15 @@ public class MemberDto {
         this.id = id;
         this.userName = userName;
         this.teamName = teamName;
+    }
+
+    public MemberDto(Member member) {
+        this.id = member.getId();
+        this.userName = member.getName();
+        Optional.ofNullable(member.getTeam())
+            .ifPresentOrElse(
+                o -> teamName = o.getName()
+                , () -> teamName = null
+            );
     }
 }
