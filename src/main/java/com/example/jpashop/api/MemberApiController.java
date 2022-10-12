@@ -40,7 +40,7 @@ public class MemberApiController {
         return member.getName();
     }
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         for (int i=0; i<100; i++) {
             memberRepository.save(new Member("회원" + i, i, null));
