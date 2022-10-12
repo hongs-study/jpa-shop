@@ -1,8 +1,10 @@
 package com.example.jpashop.api;
 
 import com.example.jpashop.entity.Member;
+import com.example.jpashop.repository.MemberRepository;
 import com.example.jpashop.service.MemberService;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
+
+    @GetMapping("/test/{id}")
+    public String findMember(@PathVariable("id") Long id) {
+        Member member = memberRepository.findById(id).get();
+        return member.getName();
+    }
+
+    //
+    @GetMapping("/test2/{id}")
+    public String findMember2(@PathVariable("id") Member member) {
+        return member.getName();
+    }
+
+    @PostConstruct
+    public void init() {
+        memberRepository.save(new Member("회원1"));
+    }
+
+
+
 
     @PostMapping
     public MemberResponse join(@RequestBody @Valid CreateMemberRequest request) {
