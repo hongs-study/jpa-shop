@@ -5,7 +5,6 @@ import com.example.jpashop.repository.MemberDto;
 import com.example.jpashop.repository.MemberRepository;
 import com.example.jpashop.service.MemberService;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
