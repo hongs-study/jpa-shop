@@ -16,6 +16,8 @@ spring:
 #        show_sql: true # system.out 으로 출력
         format_sql: true
         default_batch_fetch_size: 500
+        use_sql_comments: true # queryDsl로 생성되는 JPQL 보기(로그)
+        # use_sql_comments 추가설명 : JQPL 로그를 찍어보면, Q클래스로 생성된 엔티티 별칭을 볼 수 있다. 같은 테이블 끼리 조인해야 할 때 유용하게 쓸 수 있다
 
 logging: # logger로 출력
   level:

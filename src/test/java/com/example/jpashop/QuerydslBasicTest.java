@@ -1,5 +1,7 @@
 package com.example.jpashop;
 
+import static com.example.jpashop.querydsl.entity.QMember.member;
+
 import com.example.jpashop.querydsl.entity.Member;
 import com.example.jpashop.querydsl.entity.QMember;
 import com.example.jpashop.querydsl.entity.Team;
@@ -62,6 +64,7 @@ public class QuerydslBasicTest {
 
         Assertions.assertThat(member1.getUserName()).isEqualTo(userName);
     }
+
     @DisplayName("querydsl")
     @Test
     void test1Querydsl() {
@@ -75,6 +78,20 @@ public class QuerydslBasicTest {
         // 장점2.파라미터 자동 바인딩
         Member member1 = jpaQueryFactory.select(m).from(m)
             .where(m.userName.eq(userName))
+            .fetchOne();
+
+        Assertions.assertThat(member1.getUserName()).isEqualTo(userName);
+    }
+
+    @DisplayName("querydsl-Q클래스 활용")
+    @Test
+    void test2Querydsl() {
+
+        // Q클래스에 미리 생성되어잇는 객체를 사용하자
+        String userName = "멤버1";
+        Member member1 = jpaQueryFactory.select(member)
+            .from(member)
+            .where(member.userName.eq(userName))
             .fetchOne();
 
         Assertions.assertThat(member1.getUserName()).isEqualTo(userName);
