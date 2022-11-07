@@ -37,6 +37,9 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    //sql 로그
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+
     // web
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
@@ -60,7 +63,7 @@ querydsl {
     querydslSourcesDir = querydslDir
 }
 
-// build 시 사용할 SourceSet
+// build 시 사용할 SourceSet // IDE가 자동으로 소스폴더에 import 한다
 sourceSets {
     main.java.srcDir querydslDir
 }
